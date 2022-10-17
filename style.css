@@ -1,0 +1,49 @@
+*{
+    margin: 0px;
+}
+
+body{
+    background-color: black;
+}
+
+#cardContainer{
+    width: 1000px;
+    height: 700px;
+    position: relative;
+    top: 100px;
+    perspective: 2000px;
+    perspective-origin: 50% -800px;
+    transform-style: preserve-3d;
+    margin: auto;
+}
+#card{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
+#element{
+    transition-duration: 0.5s;
+    transition-timing-function:cubic-bezier(0, 0, 0.2, 3);
+}
+
+#element:hover{
+    background-color: blue;
+    transform: translateY(-10px);
+}
+
+.box1{
+    width: 140px;
+    height: 100px;
+    background-color: white;
+    outline-width: 1px;
+    outline-color: black;
+}
+.box2{
+    width: 140px;
+    height: 100px;
+    background-color: white;
+    outline-style: solid;
+    outline-width: 1px;
+    outline-color: black;
+}
