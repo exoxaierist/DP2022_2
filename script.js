@@ -88,6 +88,7 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1;
 const canvas = document.querySelector("#cardContainer").appendChild( renderer.domElement );
 canvas.style.transform = "translateY("+(-300)+"px) translateZ("+(400)+"px)";
+canvas.style.pointerEvents = "none";
 
 camera.position.z = 5;
 
