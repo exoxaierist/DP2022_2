@@ -71,11 +71,11 @@ const camera = new THREE.PerspectiveCamera( 35, cardContainer.offsetWidth / card
 const rgbeLoader = new RGBELoader();
 const gltfLoader = new GLTFLoader();
 let gltf = new THREE.Group();
-rgbeLoader.load("/src/env/brown_photostudio_07_1k.hdr", (texture) => {
+rgbeLoader.load("./src/env/brown_photostudio_07_1k.hdr", (texture) => {
   texture.mapping = THREE.EquirectangularReflectionMapping;
   scene.environment = texture;
 });
-gltfLoader.load("/src/model/wheel/scene.gltf",(g) => {
+gltfLoader.load("./src/model/wheel/scene.gltf",(g) => {
   gltf = g.scene;
   
 gltf.scale.set(3,3,3);
