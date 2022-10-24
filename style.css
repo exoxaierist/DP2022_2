@@ -8,15 +8,10 @@ body{
     background-color: black;
 }
 
-.test{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 #graphicContainer{
     display: flex;
-    width: 100%;
+    flex-direction: column;
+    width: 100vw;
     height: 100vh;
     position: relative;
     overflow: hidden;
@@ -45,15 +40,14 @@ canvas{
     position: absolute;
     left: 0px;
     top: 0px;
+    width: 500px;
+    height: 70px;
+    background-color: rgba(0, 136, 255, 0.002);
 }
 #element{
     display: flex;
     justify-content: center;
     align-items: center;
-
-    width: 500px;
-    height: 70px;
-    background-color: rgba(0, 136, 255, 0.002);
     
     font-family: 'Noto Sans KR', sans-serif;
     font-weight: 400;
@@ -64,10 +58,54 @@ canvas{
     transition-duration: 0.5s;
     transition-timing-function:cubic-bezier(0, 0, 0.2, 2);
 }
-
-#element:hover{
-    color: blue;
+.elementHover{
+    color: blue !important;
     transform: translateY(-15px);
+}
+#titleContainer{
+    position: relative;
+}
+#title{
+    width: 90%;
+    position: absolute;
+    left: 10%;
+    top: 20px;
+    opacity: 0%;
+
+    color:white;
+    font-size: 3rem;
+
+    transition-duration: 0.2s;
+}
+.titleActive{
+    opacity:100% !important;
+}
+
+#articleContainer{
+    position: relative;
+    width: 100vw;
+    height: 100%;
+    display: none;
+}
+#article{
+    width: 200px;
+    height: 100vh;
+    position: absolute;
+    background: green;
+    transition-duration: 0.2s;
 }
 
 .fontNoto{font-family: 'Noto Sans KR', sans-serif;}
+
+.flex{display:flex;}
+.flexRow{flex-direction: column;}
+
+.vw100{width: 100vw;}
+.w100{width:100%;}
+.h90{height:90%;}
+.h80{height:80%;}
+.h20{height:20%;}
+.h10{height:10%;}
+
+.bgGray{background-color: gray;}
+.bgBeige{background-color: beige;}

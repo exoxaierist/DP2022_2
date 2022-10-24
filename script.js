@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 
 let cards = document.querySelectorAll('#card');
+let elements = document.querySelectorAll('#element');
+let titles = document.querySelectorAll('#title');
+
 let cardContainer = document.querySelector('#cardContainer');
 let graphicContainer = document.querySelector('#graphicContainer');
 
@@ -21,25 +24,25 @@ const camera = new THREE.PerspectiveCamera( 35, 1920/1080, 0.1, 1000 );
 
 const renderer = new THREE.WebGLRenderer({ alpha:true,antialias:true});
 renderer.setSize( 2000,1100 );
-renderer.setPixelRatio(window.devicePixelRatio*1.2);
+renderer.setPixelRatio(window.devicePixelRatio*1);
 graphicContainer.appendChild( renderer.domElement );
 
-const material = new THREE.PointsMaterial({color:0xcccccc,size:0.01});
+const material = new THREE.PointsMaterial({color:0xbbbbbb,size:0.013});
 const pointArray = [];
 
-for (let i = 0; i < 4000; i++) {
-  pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiplyScalar(Math.pow(Math.random(),4)));
+for (let i = 0; i < 1000; i++) {
+  pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiplyScalar(Math.pow(Math.random(),2)));
 }
 for (let i = 0; i < 1000; i++) {
-  pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiplyScalar(Math.random()*2.5));
+  pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiplyScalar(Math.random()*3));
 }
-for (let i = 0; i < 2000; i++) {
+for (let i = 0; i < 1000; i++) {
   pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiply(new THREE.Vector3(Math.random()*0.6,Math.random()*3,Math.random()*0.6)));
 }
-for (let i = 0; i < 2000; i++) {
+for (let i = 0; i < 1000; i++) {
   pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiply(new THREE.Vector3(Math.random()*0.4,Math.random()*1.5,Math.random()*0.4)));
 }
-for (let i = 0; i < 2000; i++) {
+for (let i = 0; i < 3000; i++) {
   pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiply(new THREE.Vector3(Math.random()*0.2,Math.random()*1,Math.random()*0.2)));
 }
 for (let i = 0; i < 1000; i++) {
@@ -56,6 +59,7 @@ points.rotation.x =20*0.0174;
 
 document.addEventListener('wheel',(e) => {targetScroll = e.deltaY;scrollDir=Math.sign(e.deltaY);});
 document.addEventListener('mousemove',(e) => {mouseX = e.clientX; mouseY = e.clientY;});
+for (let i = 0; i < cards.length; i++) cards[i].addEventListener('mouseover',(e) => ElementHover(e));
 
 
 Update();
@@ -80,9 +84,8 @@ function GetDeltaTime(){
 function UpdateMousePos(){
   containerRotX += ((Math.min(mouseX/window.innerWidth,1)-0.5)*20 - containerRotX)*deltaTime;
   containerRotZ += ((-(mouseY/window.innerHeight)+0.5)*20 - containerRotZ)*deltaTime;
-  points.rotation.z += ((-(mouseX/window.innerWidth)+0.5)*20*0.0174 - points.rotation.z)*deltaTime;
-  points.rotation.y += (((mouseX/window.innerWidth)-0.5)*1 - points.rotation.y)*deltaTime*0.3;
-  points.rotation.x += (((mouseY/window.innerHeight)-0.5)*10*0.0174 - points.rotation.x + 10*0.0174)*deltaTime*2;
+  camera.rotation.z += (((mouseX/window.innerWidth)-0.5)*10*0.0174 - camera.rotation.z)*deltaTime*2;
+  points.rotation.x += (((mouseY/window.innerHeight)-0.5)*40*0.0174 - points.rotation.x + 10*0.0174)*deltaTime*2;
   cardContainer.style.transform = "translateX(-50%) translateY(-50%) rotateZ("+containerRotX+"deg) rotateX("+(containerRotZ-30)+"deg)";
 }
 
@@ -105,16 +108,30 @@ function UpdatePosition(){
     z = Math.cos(rad)*sizeX - item.offsetHeight*0.5;
     rotY = ((720+(rad*(180/Math.PI) + 90)) % 360);
     flip = (rotY<90||rotY>270)?1:-1;
-    if(i==0) console.log(offset);
+    //if(i==0) console.log(offset);
     
     item.style.transform = "translateX("+x+"px) translateZ("+z+"px) rotateY("+rotY+"deg) scale("+flip+",1)";
   }
 }
 
 function Animate3D() {
-  points.rotation.y += deltaTime*0.2*scrollDir;
+  points.rotation.y = offset
+  //camera.position.z -= 0.01;
   renderer.render( scene, camera );
 };
+
+function ElementHover(e){
+  ElementUpdate(Array.from(cards).indexOf(e.currentTarget));
+}
+
+function ElementUpdate(i){
+  for (let j = 0; j < elements.length; j++) {
+    if(j<elements.length) elements[j].classList.remove('elementHover');
+    if(j<titles.length) titles[j].classList.remove('titleActive');
+  }
+  elements[i].classList.add('elementHover');
+  titles[i].classList.add('titleActive');
+}
 
 
 
