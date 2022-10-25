@@ -7,14 +7,14 @@ let titles = document.querySelectorAll('#title');
 let cardContainer = document.querySelector('#cardContainer');
 let graphicContainer = document.querySelector('#graphicContainer');
 
-let centerX,sizeX = 480;
-let gap,targetOffset=0,offset=0,offsetCoroutine;
-let deltaTime=0,prevTime=0;
-let scroll=0,targetScroll=0,scrollDir=1;
+let deltaTime=0,prevTime=0; 
+let centerX=cardContainer.offsetWidth*0.5,sizeX = 480;
 let mouseX=0,mouseY=0;
-let containerRotZ=0,containerRotX=0;
+let gap=(Math.PI*2)/cards.length;
+let targetOffset=0,offset=0,minAngle=0,rotateDir=1,deltaAngle=0,lerpAngle=0;
+let deltaScroll=0,targetScroll=0,scrollDir=1;
 
-centerX = cardContainer.offsetWidth*0.5;
+let containerRotZ=0,containerRotX=0;
 
 ///// 3D /////
 
@@ -32,16 +32,16 @@ const pointArray = [];
 for (let i = 0; i < 1000; i++) {
   pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiplyScalar(Math.pow(Math.random(),2)));
 }
-for (let i = 0; i < 1000; i++) {
+for (let i = 0; i < 500; i++) {
   pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiplyScalar(Math.random()*3));
 }
-for (let i = 0; i < 1000; i++) {
+for (let i = 0; i < 500; i++) {
   pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiply(new THREE.Vector3(Math.random()*0.6,Math.random()*3,Math.random()*0.6)));
 }
-for (let i = 0; i < 1000; i++) {
+for (let i = 0; i < 500; i++) {
   pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiply(new THREE.Vector3(Math.random()*0.4,Math.random()*1.5,Math.random()*0.4)));
 }
-for (let i = 0; i < 3000; i++) {
+for (let i = 0; i < 2000; i++) {
   pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiply(new THREE.Vector3(Math.random()*0.2,Math.random()*1,Math.random()*0.2)));
 }
 for (let i = 0; i < 1000; i++) {
@@ -83,9 +83,10 @@ function GetDeltaTime(){
   prevTime = performance.now();
   //console.log(1/deltaTime);
 }
+
 function MousePosInteraction(){
-  //containerRotX += ((Math.min(mouseX/window.innerWidth,1)-0.5)*20 - containerRotX)*deltaTime;
-  //containerRotZ += ((-(mouseY/window.innerHeight)+0.5)*20 - containerRotZ)*deltaTime;
+  containerRotX += ((Math.min(mouseX/window.innerWidth,1)-0.5)*20 - containerRotX)*deltaTime;
+  containerRotZ += ((-(mouseY/window.innerHeight)+0.5)*20 - containerRotZ)*deltaTime;
   camera.rotation.z += (((mouseX/window.innerWidth)-0.5)*10*0.0174 - camera.rotation.z)*deltaTime*2;
   points.rotation.x += (((mouseY/window.innerHeight)-0.5)*40*0.0174 - points.rotation.x + 10*0.0174)*deltaTime*2;
   a+=deltaTime*10;
@@ -93,16 +94,20 @@ function MousePosInteraction(){
 }
 
 function Scroll(){
-  scroll += (targetScroll*0.002-scroll)*deltaTime;
-  offset += Math.max(Math.min(scroll,deltaTime*4),-deltaTime*4);
+  deltaScroll = Math.max(Math.min(deltaScroll+(targetScroll*0.002-deltaScroll)*deltaTime,1),-1);
   targetScroll = 0;
 }
 
 function UpdateCardPosition(){
-  offset += (targetOffset-offset)*0.05;
-  //offset += (deltaTime*0.01*scrollDir);
+  if(lerpAngle/minAngle<0.5) deltaAngle = (lerpAngle/minAngle+0.01)*deltaTime*minAngle*10;
+  else deltaAngle = (1-lerpAngle/minAngle+0.01)*deltaTime*minAngle*10;
+
+  if(lerpAngle<minAngle) lerpAngle+=deltaAngle;
+  else deltaAngle=0;
+
+  offset += deltaScroll + deltaAngle*rotateDir;
+
   offset = (offset+Math.PI*2)%(Math.PI*2);
-  gap = (Math.PI*2)/cards.length; 
 
   for (let i = 0; i < cards.length; i++) {
     const item = cards[i];
@@ -113,7 +118,6 @@ function UpdateCardPosition(){
     z = Math.cos(rad)*sizeX - item.offsetHeight*0.5;
     rotY = ((720+(rad*(180/Math.PI) + 90)) % 360);
     flip = (rotY<90||rotY>270)?1:-1;
-    //if(i==0) console.log(offset*58)
     
     item.style.transform = "translateX("+x+"px) translateZ("+z+"px) rotateY("+rotY+"deg) scale("+flip+",1)";
   }
@@ -144,7 +148,13 @@ function ElementHoverEvent(i){
 
 function ElementClickEvent(i){
   targetOffset = ((Math.PI*0.5-i*gap)+(Math.PI*2))%(Math.PI*2);
-  console.log((targetOffset)*57);
+  minAngle = targetOffset-offset;
+  rotateDir = Math.sign(minAngle);
+  minAngle = Math.abs(minAngle);
+  if(minAngle>Math.PI) {minAngle = Math.PI*2-minAngle;rotateDir*=-1;}
+  deltaScroll=0;
+  deltaAngle=0;
+  lerpAngle=0;
 }
 
 
