@@ -1,19 +1,45 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+@font-face{font-family: MainTitle; src: url(square_sans_serif_7.ttf);}
+@font-face{font-family: ArticleTitle; src: url();}
+@font-face{font-family: CardTitle; src: url(PowerGrotesk-Regular.otf);}
 
 *{
     margin: 0px;
     user-select: none;
+    z-index: 10;
 }
 
 body{
     background-color: black;
 }
+canvas{
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    transform: translateX(-50%) translateY(-50%);
+    pointer-events: none;
+    z-index: -10;
 
-#graphicContainer{
+    transition-duration: 1s;
+    transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+}
+
+#mainTitle{
+    width: 100%;
+    font-family: MainTitle;
+    color: white;
+    font-size: 4rem;
+    margin-top: 4px;
+    
+    margin-left: 10px;
+}
+
+#container{
     display: flex;
     flex-direction: column;
     width: 100vw;
     height: 100vh;
+    pointer-events: none;
         
     position: relative;
     overflow: hidden;
@@ -27,55 +53,68 @@ body{
     height: 50px;
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 45%;
     perspective: 3000px;
     transform-style: preserve-3d;
+    pointer-events: all;
+    z-index: 0;
+    
+    transition-duration: 1s;
+    transition-timing-function: cubic-bezier(0.7,0,0.3,1);
 }
-canvas{
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    pointer-events: none;
+.containerActive{
+    left: 0% !important;
+    top:55% !important;
 }
+
 #card{
     position: absolute;
-    left: 0px;
     top: 0px;
-    width: 500px;
+    left: 0px;
     height: 70px;
     background-color: rgba(0, 136, 255, 0.001);
 }
 #element{
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: cardTitle;
     font-weight: 400;
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     color: white;
     overflow-wrap: normal;
 
     transition-duration: 0.5s;
-    transition-timing-function:cubic-bezier(0, 0, 0.2, 2);
+    transition-timing-function:cubic-bezier(0.1,0,1,1);
 }
 .elementHover{
     color: blue !important;
-    transform: translateY(-15px);
+    transform: translateY(15px);
+}
+.elementActive{
+    scale: 2;
+}
+.elementFlip{
+    flex-direction: row-reverse !important;
 }
 #titleContainer{
+    width: 100%;
     position: relative;
+    top:-1px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: end
 }
 #title{
-    width: 90%;
     position: absolute;
-    left: 10%;
-    top: 20px;
     opacity: 0%;
 
     color:white;
-    font-size: 3rem;
+    font-family: customFont;
+    font-size: 2rem;
 
     transition-duration: 0.2s;
 }
@@ -87,27 +126,66 @@ canvas{
     position: relative;
     width: 100vw;
     height: 100%;
-    display: none;
+    left: 50%;
+    background-color: black;
+    border-left: solid 1px gray;
+
+    transition-duration: 1.5s;
+    transition-timing-function: cubic-bezier(0.7,0,0.1,1);
 }
 #article{
-    width: 200px;
     height: 100vh;
-    position: absolute;
-    background: green;
     transition-duration: 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#articleBody{
+    width: 600px;
+    margin: 100px;
+    color: white;
+    line-height: 180%;
+}
+.articleConActive{
+    left: 0% !important;
 }
 
+.fontCustom1{font-family: customFont;}
 .fontNoto{font-family: 'Noto Sans KR', sans-serif;}
 
 .flex{display:flex;}
-.flexRow{flex-direction: column;}
+.flexColumn{flex-direction: column;}
+.justifyBetween{justify-content: space-between;}
+.justifyCenter{justify-content: center;}
+.alignCenter{align-items: center;}
 
 .vw100{width: 100vw;}
 .w100{width:100%;}
+.w50{width: 50%;}
+.w30{width: 31%;}
+.h100{height: 100%;}
+.h95{height:95%;}
 .h90{height:90%;}
 .h80{height:80%;}
 .h20{height:20%;}
 .h10{height:10%;}
+.h5{height: 5%;}
 
+.bgBlack{background-color: rgba(0, 0, 0);}
 .bgGray{background-color: gray;}
 .bgBeige{background-color: beige;}
+
+.borderWhite{border:1px white solid}
+.borderTop{border-top:1px gray solid;}
+.borderBottom{border-bottom: 1px gray solid;}
+.borderRight{border-top: 1px gray solid;}
+.borderLeft{border-left: 1px gray solid;}
+
+.noPointer{pointer-events: none;}
+
+h1{
+    padding: 5px;
+    font-weight: 700;
+    background-color: white;
+    color: black;
+}

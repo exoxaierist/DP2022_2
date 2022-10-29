@@ -9,17 +9,59 @@
     <script type="importmap">
         {
             "imports": {
-                "three": "./threeJS/build/three.module.js",
-                "three/examples/jsm/loaders/RGBELoader":"./threeJS/examples/jsm/loaders/RGBELoader.js",
-                "three/examples/jsm/loaders/GLTFLoader":"./threeJS/examples/jsm/loaders/GLTFLoader.js"
+                "three": "./threeJS/build/three.module.js"
             }
         }
     </script>
     <script type="module" src="script.js" defer></script>
 </head>
 <body>
-    <div id="graphicContainer"> 
-        <div class="w100 h10">
+    <div id="container"> 
+        <div class="h95 flex noPointer">
+            <div class="w100 h100 noPointer">
+                <div id="cardContainer">
+                    <div id="card"><div id="element">test</div></div>
+                    <div id="card"><div id="element">dall-e 2</div></div>
+                    <div id="card"><div id="element">parti</div></div>
+                    <div id="card"><div id="element">novelAI</div></div>
+                    <div id="card"><div id="element">dreambooth</div></div>
+                    <div id="card"><div id="element">stable diffusion</div></div>
+                    <div id="card"><div id="element">midjourney</div></div>
+                    <div id="card"><div id="element">orchestra</div></div>
+                    <div id="card"><div id="element">hello world</div></div>
+                    <div id="card"><div id="element">infinity</div></div>
+                    <div id="card"><div id="element">midJourney</div></div>
+                    <div id="card"><div id="element">progra∏er˚</div></div>
+                    <div id="card"><div id="element">comp∂ser</div></div>
+                </div>
+            </div>
+            <div id="articleContainer">
+                <div id="article">
+                    <div id="articleBody">
+                        <div class="flex justifyBetween">
+                            <img src="./src/img/article/dalle1.jpg" alt="" style="object-fit: cover;" class="w30 borderWhite">
+                            <img src="./src/img/article/dalle2.jpg" alt="" style="object-fit: cover;" class="w30 borderWhite">
+                            <img src="./src/img/article/dalle3.jpg" alt="" style="object-fit: cover;" class="w30 borderWhite">
+                        </div>
+                        <br>
+                        <h1>DALL-E 2</h1>
+                        <br>
+                        <div class="flex">
+                            <div class="w50">
+                                <h2>Source.</h2>OpenAI, USA
+                            </div>
+                            <div class="w50">
+                                <h2>Creation.</h2>2021. 1. 17
+                            </div>
+                        </div>
+                        <br>
+                        <h2>About.</h2>
+                        <p>달리는 인터넷에서 가져온 수억 개의 이미지로 훈련된 딥 러닝 이미지 합성 모델이다. 단어와 이미지 사이의 연관성을 학습하기 위해 '잠재 확산'이라는 기술을 활용, 프롬프트라고 하는 텍스트 설명을 입력하면 거의 모든 예술적 스타일에서 1024×1024 픽셀 이미지로 렌더링된 것을 보여준다.이미지를 업로드하고 합성해 크기를 확장할 수 있는 ‘아웃페인팅’이라는 기능도 갖췄다. 또 스타일을 혼합하고, 사진 사이에 시각적 브리지를 생성해 여러 사진을 하나로 병합할 수 있다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w100 h5 flex bgBlack alignCenter borderTop">
             <div id="titleContainer">
                 <div id="title">1 Main Title</div>
                 <div id="title">2 Main Title</div>
@@ -36,39 +78,8 @@
                 <div id="title">13 Main Title</div>
             </div>
         </div>
-        <div class="w100 h90">
-            <div id="cardContainer">
-                <div id="card"><div id="element">Test</div></div>
-                <div id="card"><div id="element">DALL-E 2</div></div>
-                <div id="card"><div id="element">Parti</div></div>
-                <div id="card"><div id="element">NovelAI</div></div>
-                <div id="card"><div id="element">DreamBooth</div></div>
-                <div id="card"><div id="element">StableDiffusion</div></div>
-                <div id="card"><div id="element">MidJourney</div></div>
-                <div id="card"><div id="element">Orchestra</div></div>
-                <div id="card"><div id="element">Mango</div></div>
-                <div id="card"><div id="element">Infinity</div></div>
-                <div id="card"><div id="element">MidJourney</div></div>
-                <div id="card"><div id="element">Mantra</div></div>
-                <div id="card"><div id="element">Revision</div></div>
-            </div>
-        </div>
     </div>
-    <div id="articleContainer">
-        <div id="article">1 asdfasdfasdf</div>
-        <div id="article">2 asdfasdfasdf</div>
-        <div id="article">3 asdfasdfasdf</div>
-        <div id="article">4 asdfasdfasdf</div>
-        <div id="article">5 asdfasdfasdf</div>
-        <div id="article">6 asdfasdfasdf</div>
-        <div id="article">7 asdfasdfasdf</div>
-        <div id="article">8 asdfasdfasdf</div>
-        <div id="article">9 asdfasdfasdf</div>
-        <div id="article">10 asdfasdfasdf</div>
-        <div id="article">11 asdfasdfasdf</div>
-        <div id="article">12 asdfasdfasdf</div>
-        <div id="article">13 asdfasdfasdf</div>
-    </div>
+    
     
     
 </body>
