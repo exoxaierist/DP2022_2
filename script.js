@@ -17,7 +17,7 @@ let deltaScroll=0,targetScroll=0,scrollDir=1;
 
 let containerRotZ=0,containerRotX=0;
 
-let articleMode = false;
+let articleMode = false,articleModeTransition = false;
 let articleTarget = 0;
 let canChangeCard = true;
 
@@ -25,13 +25,14 @@ let canChangeCard = true;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 35, 1920/1080, 0.1, 1000 );
+let targetZ = 5,deltaZ=0;
 
 const renderer = new THREE.WebGLRenderer({ alpha:true,antialias:true});
 renderer.setSize( 2000,1100 );
 renderer.setPixelRatio(window.devicePixelRatio*1);
 graphicContainer.appendChild( renderer.domElement );
 
-const material = new THREE.PointsMaterial({color:0xbbbbbb,size:0.012});
+const material = new THREE.PointsMaterial({color:0xbbbbbb,size:0.01});
 const pointArray = [];
 
 for (let i = 0; i < 1000; i++) {
@@ -67,6 +68,8 @@ for (let i = 0; i < cards.length; i++) {
   cards[i].addEventListener('mouseover',(e) => ElementHover(e));
   cards[i].addEventListener('click',(e) => ElementClick(e));
 }
+document.querySelector('#articleExitBtn').addEventListener('click',ExitArticleMode);
+document.addEventListener('keydown',(e)=>{if(e.code === "Escape"&&articleMode) ExitArticleMode();});
 
 
 let a=0;
@@ -100,19 +103,38 @@ function MousePosInteraction(){
 
 function Scroll(){
   deltaScroll = Math.max(Math.min(deltaScroll+(targetScroll*0.002-deltaScroll)*deltaTime,1),-1);
+  if(articleMode&&targetScroll!=0) {TargetCard((articleTarget-Math.sign(targetScroll))%cards.length);}
   targetScroll = 0;
-  if(articleMode && Math.abs(deltaScroll)>0.002) TargetCard((articleTarget+Math.sign(deltaScroll))%cards.length);
+  
 }
 
 function UpdateCardPosition(){
-  if(lerpAngle/minAngle<0.5) deltaAngle = (lerpAngle/minAngle+0.03)*deltaTime*minAngle*5;
-  else deltaAngle = (1-lerpAngle/minAngle)*deltaTime*minAngle*4;
+  if(articleMode){
+    if(Math.sign(targetOffset-offset)!=rotateDir){
+      if(rotateDir>0) offset+=((targetOffset+Math.PI*2)-offset)*deltaTime*8;
+      else offset+=(targetOffset-(offset+Math.PI*2))*deltaTime*8;
+    }else offset+=(targetOffset-offset)*deltaTime*8;
 
-  if((Math.abs(minAngle-lerpAngle))>0.01) lerpAngle+=deltaAngle;
-  else {deltaAngle=0; canChangeCard=true;}
+    if(Math.abs(targetOffset-offset)<0.08) canChangeCard = true;
 
-  offset += deltaAngle*rotateDir;
-  if(!articleMode) offset += deltaScroll + deltaTime*0.1;
+  } else{
+    if(lerpAngle/minAngle<0.5) deltaAngle = (lerpAngle/minAngle+0.03)*deltaTime*minAngle*5;
+    else deltaAngle = (1-lerpAngle/minAngle)*deltaTime*minAngle*4;
+    
+    if((Math.abs(minAngle-lerpAngle))>0.06) lerpAngle+=deltaAngle;
+    else {
+      deltaAngle=0; 
+      canChangeCard=true;
+      if(articleModeTransition) {
+        articleMode = true;
+        articleModeTransition = false;
+        TargetCard(articleTarget);
+      }
+      else offset += deltaScroll + deltaTime*0.1*scrollDir;
+    }
+    offset += deltaAngle*rotateDir;
+  }
+
   offset = (offset+Math.PI*2)%(Math.PI*2);
 
   yScale += (targetYScale-yScale)*deltaTime;
@@ -127,9 +149,6 @@ function UpdateCardPosition(){
     z = Math.cos(rad)*sizeX - item.offsetHeight*0.5;
     rotY = ((720+(rad*(180/Math.PI) + 90)) % 360);
     flip = (rotY<90||rotY>270)?1:-1;
-    
-    if(rotY<180||rotY>270) item.classList.add('elementFlip');
-    else item.classList.remove('elementFlip');
 
     item.style.transform = "translateY("+(y*yScale)+"px) translateX("+x+"px) translateZ("+z+"px) rotateY("+rotY+"deg) scale("+flip+",1)";
   }
@@ -137,7 +156,8 @@ function UpdateCardPosition(){
 
 function Animate3D() {
   points.rotation.y = offset
-  //camera.position.z -= 0.01;
+  deltaZ += deltaZ>0?Math.min((targetZ-camera.position.z)*deltaTime*4-deltaZ,deltaTime*0.08):Math.max((targetZ-camera.position.z)*deltaTime*4-deltaZ,-deltaTime*0.08);
+  camera.position.z += deltaZ;
   renderer.render( scene, camera );
 };
 
@@ -151,22 +171,34 @@ function ElementClick(e){
 
 function ElementHoverEvent(i){
   for (let j = 0; j < elements.length; j++) {
-    if(j<elements.length) elements[j].classList.remove('elementHover');
+    if(j<elements.length) {
+      elements[j].classList.remove('elementHover');
+      elements[j].classList.remove('elementActiveHover');
+    }
     if(j<titles.length) titles[j].classList.remove('titleActive');
   }
-  elements[i].classList.add('elementHover');
-  titles[i].classList.add('titleActive');
+  if(articleMode){
+    elements[i].classList.add('elementActiveHover');
+  }
+  else if(!articleModeTransition){
+    elements[i].classList.add('elementHover');
+    titles[i].classList.add('titleActive');
+  }
+  console.log(articleMode);
 }
 
 function ElementClickEvent(i){
-  TargetCard(i);
   if(!articleMode) EnterArticleMode();
-  else ExitArticleMode();
+  TargetCard(i);
 }
 
 function TargetCard(i){
-  console.log(canChangeCard);
   if(!canChangeCard) return;
+  i = (i+elements.length)%(elements.length);
+  if(articleMode) {
+    elements[articleTarget].classList.remove('elementActiveMain');
+    elements[i].classList.add('elementActiveMain');
+  }
   canChangeCard = false;
   targetOffset = ((Math.PI*0.5-i*gap)+(Math.PI*2))%(Math.PI*2);
   minAngle = targetOffset-offset;
@@ -176,13 +208,14 @@ function TargetCard(i){
   deltaScroll=0;
   deltaAngle=0;
   lerpAngle=0;
-
   articleTarget = i;
 }
 
 function EnterArticleMode(){
-  articleMode=true;
+  articleModeTransition = true;
   targetYScale = 200;
+  targetZ = 3;
+  deltaZ = -0.001;
 
   cardContainer.classList.add('containerActive');
   articleContainer.classList.add('articleConActive');
@@ -193,17 +226,21 @@ function EnterArticleMode(){
 }
 
 function ExitArticleMode(){
+  if(articleModeTransition) return;
   articleMode=false;
   targetYScale = 0;
-
-  TargetCard(Math.floor(Math.random()*cards.length));
-
+  targetZ=5;
+  deltaZ = 0.001;
+  
   cardContainer.classList.remove('containerActive');
   articleContainer.classList.remove('articleConActive');
   renderer.domElement.classList.remove('containerActive');
   for (let i = 0; i < elements.length; i++) {
     elements[i].classList.remove('elementActive');
+    elements[i].classList.remove('elementActiveMain');
   }
+  TargetCard(Math.floor(Math.random()*cards.length));
+
 }
 
 
