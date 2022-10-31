@@ -18,7 +18,7 @@
 <body>
     <div id="container"> 
         <div class="h95 flex noPointer">
-            <div class="w100 h100 noPointer">
+            <div class="noPointer">
                 <div id="cardContainer">
                     <div id="card"><div id="element">test</div></div>
                     <div id="card"><div id="element">dall-e 2</div></div>
@@ -37,8 +37,8 @@
             </div>
             <div id="articleContainer">
                 <div id="articleExitBtn">X</div>
-                <div id="article">
-                    <div id="articleBody">
+                <div id="articleBox">
+                    <div id="article">
                         <div class="flex justifyBetween">
                             <img src="./src/img/article/dalle1.jpg" alt="" style="object-fit: cover;" class="w30 borderWhite">
                             <img src="./src/img/article/dalle2.jpg" alt="" style="object-fit: cover;" class="w30 borderWhite">
@@ -64,7 +64,12 @@
         </div>
         <div class="w100 h5 flex bgBlack alignCenter borderTop">
             <div id="titleContainer">
-                <div id="title">1 Main Title</div>
+                <div id="title" class="titleActive">
+                    <div class="titleAnim">Formation</div>
+                    <div class="titleAnim delay3">Formation</div>
+                    <div class="titleAnim delay6">Formation</div>
+                    <div class="titleAnim delay9">Formation</div>
+                </div>
                 <div id="title">2 Main Title</div>
                 <div id="title">3 Main Title</div>
                 <div id="title">4 Main Title</div>

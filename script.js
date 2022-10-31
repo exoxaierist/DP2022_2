@@ -3,6 +3,7 @@ import * as THREE from 'three';
 let cards = document.querySelectorAll('#card');
 let elements = document.querySelectorAll('#element');
 let titles = document.querySelectorAll('#title');
+let articles = document.querySelectorAll('#article');
 
 let cardContainer = document.querySelector('#cardContainer');
 let graphicContainer = document.querySelector('#container');
@@ -32,7 +33,7 @@ renderer.setSize( 2000,1100 );
 renderer.setPixelRatio(window.devicePixelRatio*1);
 graphicContainer.appendChild( renderer.domElement );
 
-const material = new THREE.PointsMaterial({color:0xbbbbbb,size:0.01});
+const material = new THREE.PointsMaterial({color:0xeeeeee,size:0.01});
 const pointArray = [];
 
 for (let i = 0; i < 1000; i++) {
@@ -175,14 +176,14 @@ function ElementHoverEvent(i){
       elements[j].classList.remove('elementHover');
       elements[j].classList.remove('elementActiveHover');
     }
-    if(j<titles.length) titles[j].classList.remove('titleActive');
+    //if(j<titles.length) titles[j].classList.remove('titleActive');
   }
   if(articleMode){
     elements[i].classList.add('elementActiveHover');
   }
   else if(!articleModeTransition){
     elements[i].classList.add('elementHover');
-    titles[i].classList.add('titleActive');
+    //titles[i].classList.add('titleActive');
   }
   console.log(articleMode);
 }
@@ -208,7 +209,15 @@ function TargetCard(i){
   deltaScroll=0;
   deltaAngle=0;
   lerpAngle=0;
+  TargetArticle(i);
   articleTarget = i;
+}
+
+function TargetArticle(i){
+  articles[i%articles.length].classList.add('articleAppear');
+  setTimeout(() => {
+    articles[i%articles.length].classList.remove('articleAppear');
+  }, 500);
 }
 
 function EnterArticleMode(){
@@ -240,7 +249,6 @@ function ExitArticleMode(){
     elements[i].classList.remove('elementActiveMain');
   }
   TargetCard(Math.floor(Math.random()*cards.length));
-
 }
 
 
