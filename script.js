@@ -29,14 +29,14 @@ let canChangeCard = true;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 35, 1920/1080, 0.1, 1000 );
-let targetZ = 5,deltaZ=0;
+let targetZ = 5,deltaZ=0,targetXRot = 0;
 
 const renderer = new THREE.WebGLRenderer({ alpha:true,antialias:true});
 renderer.setSize( 2000,1100 );
 renderer.setPixelRatio(window.devicePixelRatio*1);
 graphicContainer.appendChild( renderer.domElement );
 
-const material = new THREE.PointsMaterial({color:0xeeeeee,size:0.01});
+const material = new THREE.PointsMaterial({color:0xeeeeee,size:0.012});
 const pointArray = [];
 
 for (let i = 0; i < 1000; i++) {
@@ -76,7 +76,7 @@ document.querySelector('#articleExitBtn').addEventListener('click',ExitArticleMo
 document.addEventListener('keydown',(e)=>{if(e.code === "Escape"&&articleMode) ExitArticleMode();});
 
 
-let a=0;
+
 Update();
 
 
@@ -97,12 +97,18 @@ function GetDeltaTime(){
 }
 
 function MousePosInteraction(){
-  //containerRotX += ((Math.min(mouseX/window.innerWidth,1)-0.5)*20 - containerRotX)*deltaTime;
-  containerRotZ += ((-(mouseY/window.innerHeight)+0.5)*20 - containerRotZ)*deltaTime;
-  camera.rotation.z += (((mouseX/window.innerWidth)-0.5)*10*0.0174 - camera.rotation.z)*deltaTime*2;
-  points.rotation.x += (((mouseY/window.innerHeight)-0.5)*40*0.0174 - points.rotation.x + 10*0.0174)*deltaTime*2;
-  a+=deltaTime*10;
-  cardContainer.style.transform = "translateX(-50%) translateY(-50%) translateZ(-100px) rotateZ("+containerRotX+"deg) rotateX("+(-20)+"deg)";
+  var targetX,targetY;
+  targetX = (mouseX/window.innerWidth)-0.5;
+  targetY = (mouseY/window.innerHeight)-0.5;
+  if(articleMode){
+    targetX = 0;
+    targetY *= 0.5;
+  }
+  containerRotX += (targetX*10 - containerRotX)*deltaTime;
+  containerRotZ += (-targetY*25 - containerRotZ)*deltaTime;
+  camera.rotation.z += (targetX*10*0.0174 - camera.rotation.z)*deltaTime*2;
+  points.rotation.x += (targetY*20*0.0174 - points.rotation.x + 10*0.0174)*deltaTime*2;
+  cardContainer.style.transform = "translateX(-50%) translateY(-50%) translateZ(-100px) rotateZ("+(containerRotX)+"deg) rotateX("+(containerRotZ-20)+"deg)";
 }
 
 function Scroll(){
@@ -119,7 +125,6 @@ function UpdateCardPosition(){
     }else offset+=(targetOffset-offset)*deltaTime*8;
 
     if(Math.abs(targetOffset-offset)<0.08) {canChangeCard = true;}
-    //if(Math.abs(targetOffset-offset)<0.09 && currentArticle!=currentCard) {TargetArticle(currentCard);}
 
   } else{
     if(lerpAngle/minAngle<0.5) deltaAngle = (lerpAngle/minAngle+0.03)*deltaTime*minAngle*5;
@@ -159,11 +164,14 @@ function UpdateCardPosition(){
 }
 
 function Animate3D() {
-  points.rotation.y = offset
+  if(articleMode) points.rotation.y += deltaTime*0.05*rotateDir;
+  else points.rotation.y = offset
   deltaZ += deltaZ>0?Math.min((targetZ-camera.position.z)*deltaTime*4-deltaZ,deltaTime*0.08):Math.max((targetZ-camera.position.z)*deltaTime*4-deltaZ,-deltaTime*0.08);
   camera.position.z += deltaZ;
   renderer.render( scene, camera );
 };
+
+
 
 function ElementHover(e){
   ElementHoverEvent(Array.from(cards).indexOf(e.currentTarget));
@@ -174,20 +182,9 @@ function ElementClick(e){
 }
 
 function ElementHoverEvent(i){
-  for (let j = 0; j < elements.length; j++) {
-    if(j<elements.length) {
-      elements[j].classList.remove('elementHover');
-      elements[j].classList.remove('elementActiveHover');
-    }
-    //if(j<titles.length) titles[j].classList.remove('titleActive');
-  }
-  if(articleMode){
-    elements[i].classList.add('elementActiveHover');
-  }
-  else if(!articleModeTransition){
-    elements[i].classList.add('elementHover');
-    //titles[i].classList.add('titleActive');
-  }
+  for (let j = 0; j < elements.length; j++) elements[j%elements.length].classList.remove('elementActiveHover');
+  if(articleMode) elements[i].classList.add('elementActiveHover');
+  if(!articleMode && !articleModeTransition) TargetTitle(i);
 }
 
 function ElementClickEvent(i){
@@ -214,8 +211,9 @@ function TargetCard(i){
   if(prevCard<0) prevCard = (i+1)%elements.length;
   else prevCard = currentCard;
   currentCard = i;
-  TargetArticle(currentCard);
-  //if(!articleMode) TargetArticle(currentCard);
+  scrollDir = rotateDir;
+  TargetArticle();
+  if(articleMode) TargetTitle(currentArticle);
 }
 
 function TargetArticle(){
@@ -236,7 +234,7 @@ function TargetArticle(){
     setTimeout(() => {
       articles[prev%articles.length].classList.remove('articleDisappearDown');
       articles[current%articles.length].classList.remove('articleAppearDown');
-    }, 500);
+    }, 200);
   }
   else{
     articles[prev%articles.length].classList.add('articleDisappearUp');
@@ -245,20 +243,26 @@ function TargetArticle(){
     setTimeout(() => {
       articles[prev%articles.length].classList.remove('articleDisappearUp');
       articles[current%articles.length].classList.remove('articleAppearUp');
-    }, 500);
+    }, 200);
   }
   prevArticle = currentArticle;
+}
+function TargetTitle(i){
+  for (let j = 0; j < titles.length; j++) {
+    titles[j].classList.remove('titleActive');
+  }
+  titles[i%titles.length].classList.add('titleActive');
 }
 
 function EnterArticleMode(){
   articleModeTransition = true;
-  targetYScale = 200;
+  targetYScale = 250;
   targetZ = 3;
   deltaZ = -0.001;
 
-  cardContainer.classList.add('containerActive');
+  cardContainer.classList.add('cardConActive');
   articleContainer.classList.add('articleConActive');
-  renderer.domElement.classList.add('containerActive');
+  renderer.domElement.classList.add('canvasActive');
   for (let i = 0; i < elements.length; i++) {
     elements[i].classList.add('elementActive');
   }
@@ -271,9 +275,9 @@ function ExitArticleMode(){
   targetZ=5;
   deltaZ = 0.001;
   
-  cardContainer.classList.remove('containerActive');
+  cardContainer.classList.remove('cardConActive');
   articleContainer.classList.remove('articleConActive');
-  renderer.domElement.classList.remove('containerActive');
+  renderer.domElement.classList.remove('canvasActive');
   for (let i = 0; i < elements.length; i++) {
     elements[i].classList.remove('elementActive');
     elements[i].classList.remove('elementActiveMain');

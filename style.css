@@ -25,7 +25,14 @@ canvas{
     transition-duration: 1s;
     transition-timing-function: cubic-bezier(0.7,0,0.3,1);
 }
-
+#loadingOverlay{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: green;
+}
 #mainTitle{
     width: 100%;
     font-family: MainTitle;
@@ -61,12 +68,17 @@ canvas{
     pointer-events: all;
     z-index: 0;
     
-    transition-duration: 1s;
+    transition-duration: 1s, 1s;
+    transition-property: left, top;
     transition-timing-function: cubic-bezier(0.7,0,0.3,1);
 }
-.containerActive{
+.cardConActive{
     left: 0% !important;
-    top:55% !important;
+    top: 56% !important;
+}
+.canvasActive{
+    left: 0% !important;
+    top: 50% !important;
 }
 
 #card{
@@ -88,24 +100,26 @@ canvas{
     color: #ffffff;
     overflow-wrap: normal;
 
-    transition-duration: 0.8s, 0.3s, 0.1s,0.2s;
-    transition-property: scale, color, transform, opacity;
+    transition-duration: 0.8s, 0.3s, 0.1s, 0.2s, 0.4s;
+    transition-property: scale, color, transform, opacity, margin;
     transition-timing-function:cubic-bezier(0.4,0,0.6,1);
 }
-.elementHover{
-    color: #ff204d !important;
+#element:hover{
+    color:#ff204d;
 }
 .elementActive{
-    scale: 1.6;
-    transform: translateX(-40px);
+    scale: 1.8;
+    transform: translateX(0px);
+    margin-left: -300px;
 }
 .elementActiveHover{
-    transform: translateX(-35px);
+    transform: translateX(5px);
+    color:#ffffff !important;
     opacity: 30%;
 }
 .elementActiveMain{
     color: #ff204d !important;
-    transform: translateX(50px) scale(1.3,1.3) !important;
+    transform: translateX(100px) translateY(5px)scale(1.5,1.5) !important;
     opacity:100% !important;
 }
 #titleContainer{
@@ -188,7 +202,7 @@ canvas{
 }
 #article{
     opacity: 0%;
-    transition-duration: 0.5s;
+    transition-duration: 0.2s;
     position: absolute;
     margin-top: auto;
 
@@ -203,10 +217,10 @@ canvas{
 .articleActive{
     opacity: 100% !important;
 }
-.articleAppearDown{animation: appearDownAnim 0.5s;}
-.articleAppearUp{animation: appearUpAnim 0.5s;}
-.articleDisappearDown{animation: disappearDownAnim 0.5s;}
-.articleDisappearUp{animation: disappearUpAnim 0.5s;}
+.articleAppearDown{animation: appearDownAnim 0.2s;}
+.articleAppearUp{animation: appearUpAnim 0.2s;}
+.articleDisappearDown{animation: disappearDownAnim 0.2s;}
+.articleDisappearUp{animation: disappearUpAnim 0.2s;}
 @keyframes appearDownAnim{
     0%{transform: translateY(-500px);}
     100%{transform: translateY(0);}
