@@ -19,7 +19,10 @@ let deltaScroll=0,targetScroll=0,scrollDir=1;
 let containerRotZ=0,containerRotX=0;
 
 let articleMode = false,articleModeTransition = false;
-let articleTarget = 0;
+let currentCard = 0;
+let currentArticle = 0;
+let prevCard = -1;
+let prevArticle = 0;
 let canChangeCard = true;
 
 ///// 3D /////
@@ -104,19 +107,19 @@ function MousePosInteraction(){
 
 function Scroll(){
   deltaScroll = Math.max(Math.min(deltaScroll+(targetScroll*0.002-deltaScroll)*deltaTime,1),-1);
-  if(articleMode&&targetScroll!=0) {TargetCard((articleTarget-Math.sign(targetScroll))%cards.length);}
+  if(articleMode&&targetScroll!=0) {TargetCard((currentCard-Math.sign(targetScroll))%cards.length);}
   targetScroll = 0;
-  
 }
 
 function UpdateCardPosition(){
   if(articleMode){
-    if(Math.sign(targetOffset-offset)!=rotateDir){
+    if(Math.sign(targetOffset-offset)!=rotateDir && !canChangeCard){
       if(rotateDir>0) offset+=((targetOffset+Math.PI*2)-offset)*deltaTime*8;
       else offset+=(targetOffset-(offset+Math.PI*2))*deltaTime*8;
     }else offset+=(targetOffset-offset)*deltaTime*8;
 
-    if(Math.abs(targetOffset-offset)<0.08) canChangeCard = true;
+    if(Math.abs(targetOffset-offset)<0.08) {canChangeCard = true;}
+    //if(Math.abs(targetOffset-offset)<0.09 && currentArticle!=currentCard) {TargetArticle(currentCard);}
 
   } else{
     if(lerpAngle/minAngle<0.5) deltaAngle = (lerpAngle/minAngle+0.03)*deltaTime*minAngle*5;
@@ -129,7 +132,7 @@ function UpdateCardPosition(){
       if(articleModeTransition) {
         articleMode = true;
         articleModeTransition = false;
-        TargetCard(articleTarget);
+        TargetCard(currentCard);
       }
       else offset += deltaScroll + deltaTime*0.1*scrollDir;
     }
@@ -185,7 +188,6 @@ function ElementHoverEvent(i){
     elements[i].classList.add('elementHover');
     //titles[i].classList.add('titleActive');
   }
-  console.log(articleMode);
 }
 
 function ElementClickEvent(i){
@@ -197,7 +199,7 @@ function TargetCard(i){
   if(!canChangeCard) return;
   i = (i+elements.length)%(elements.length);
   if(articleMode) {
-    elements[articleTarget].classList.remove('elementActiveMain');
+    elements[currentCard].classList.remove('elementActiveMain');
     elements[i].classList.add('elementActiveMain');
   }
   canChangeCard = false;
@@ -209,15 +211,43 @@ function TargetCard(i){
   deltaScroll=0;
   deltaAngle=0;
   lerpAngle=0;
-  TargetArticle(i);
-  articleTarget = i;
+  if(prevCard<0) prevCard = (i+1)%elements.length;
+  else prevCard = currentCard;
+  currentCard = i;
+  TargetArticle(currentCard);
+  //if(!articleMode) TargetArticle(currentCard);
 }
 
-function TargetArticle(i){
-  articles[i%articles.length].classList.add('articleAppear');
-  setTimeout(() => {
-    articles[i%articles.length].classList.remove('articleAppear');
-  }, 500);
+function TargetArticle(){
+  var prev = prevArticle;
+  var current = currentCard;
+
+  for (let i = 0; i < articles.length; i++) articles[i].classList.remove('articleActive');
+  articles[current%articles.length].classList.add('articleActive');
+  currentArticle = currentCard;
+
+  if(prev%articles.length == current%articles.length) return;
+
+  console.log(prev%articles.length+ " " + current%articles.length);
+  if(rotateDir<0){
+    articles[prev%articles.length].classList.add('articleDisappearDown');
+    articles[current%articles.length].classList.add('articleAppearDown');
+    
+    setTimeout(() => {
+      articles[prev%articles.length].classList.remove('articleDisappearDown');
+      articles[current%articles.length].classList.remove('articleAppearDown');
+    }, 500);
+  }
+  else{
+    articles[prev%articles.length].classList.add('articleDisappearUp');
+    articles[current%articles.length].classList.add('articleAppearUp');
+    
+    setTimeout(() => {
+      articles[prev%articles.length].classList.remove('articleDisappearUp');
+      articles[current%articles.length].classList.remove('articleAppearUp');
+    }, 500);
+  }
+  prevArticle = currentArticle;
 }
 
 function EnterArticleMode(){

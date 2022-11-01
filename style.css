@@ -162,6 +162,7 @@ canvas{
     left: 100%;
     background-color: black;
     border-left: solid 1px gray;
+    pointer-events: all;
 
     transition-duration: 1.5s;
     transition-timing-function: cubic-bezier(0.7,0,0.1,1);
@@ -177,7 +178,6 @@ canvas{
     border-right: 1px gray solid;
     font-size: 2rem;
     font-weight: 100;
-    pointer-events: all;
 }
 #articleBox{
     width: 47%;
@@ -187,8 +187,12 @@ canvas{
     position:relative;
 }
 #article{
+    opacity: 0%;
+    transition-duration: 0.5s;
     position: absolute;
-    background-color: rgba(128, 128, 128, 0.421);
+    margin-top: auto;
+
+    background-color: rgba(128, 128, 128, 0.01);
     width: 600px;
     color: white;
     line-height: 180%;
@@ -196,18 +200,28 @@ canvas{
 .articleConActive{
     left: 50% !important;
 }
-.articleAppear{
-    animation: appearAnim 0.5s;
+.articleActive{
+    opacity: 100% !important;
 }
-@keyframes appearAnim{
-    0%{
-        opacity: 0%;
-        top: -100vh;
-    }
-    100%{
-        opacity: 100%;
-        top: 0px;
-    }
+.articleAppearDown{animation: appearDownAnim 0.5s;}
+.articleAppearUp{animation: appearUpAnim 0.5s;}
+.articleDisappearDown{animation: disappearDownAnim 0.5s;}
+.articleDisappearUp{animation: disappearUpAnim 0.5s;}
+@keyframes appearDownAnim{
+    0%{transform: translateY(-500px);}
+    100%{transform: translateY(0);}
+}
+@keyframes appearUpAnim{
+    0%{transform: translateY(500px);}
+    100%{transform: translateY(0);}
+}
+@keyframes disappearUpAnim{
+    0%{transform: translateY(0);}
+    100%{transform: translateY(-500px);}
+}
+@keyframes disappearDownAnim{
+    0%{transform: translateY(0);}
+    100%{transform: translateY(500px);}
 }
 
 .fontCustom1{font-family: customFont;}
@@ -246,6 +260,5 @@ canvas{
 h1{
     padding: 5px;
     font-weight: 700;
-    background-color: white;
-    color: black;
+    color: white;
 }
