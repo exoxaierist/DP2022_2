@@ -8,10 +8,11 @@ let articles = document.querySelectorAll('#article');
 let cardContainer = document.querySelector('#cardContainer');
 let graphicContainer = document.querySelector('#container');
 let articleContainer = document.querySelector('#articleContainer');
+let cursor = document.querySelector('#cursor');
 
 let deltaTime=0,prevTime=0; 
 let centerX=cardContainer.offsetWidth*0.5,sizeX = 550,targetYScale=0,yScale=0;
-let mouseX=0,mouseY=0;
+let mouseX=0,mouseY=0,smoothX=0,smoothY=0;
 let gap=(Math.PI*2)/cards.length;
 let targetOffset=0,offset=0,minAngle=0,rotateDir=1,deltaAngle=0,lerpAngle=0.001;
 let deltaScroll=0,targetScroll=0,scrollDir=1;
@@ -36,7 +37,7 @@ renderer.setSize( 2000,1100 );
 renderer.setPixelRatio(window.devicePixelRatio*1);
 graphicContainer.appendChild( renderer.domElement );
 
-const material = new THREE.PointsMaterial({color: 0xe0ded9,size:0.012});
+const material = new THREE.PointsMaterial({color: 0x190d06,size:0.015});
 const pointArray = [];
 
 for (let i = 0; i < 1000; i++) {
@@ -97,6 +98,10 @@ function GetDeltaTime(){
 }
 
 function MousePosInteraction(){
+  smoothX += (mouseX-smoothX)*deltaTime*5;
+  smoothY += (mouseY-smoothY)*deltaTime*5;
+  cursor.style.left = smoothX+"px";
+  cursor.style.top = smoothY+"px";
   var targetX,targetY;
   targetX = (mouseX/window.innerWidth)-0.5;
   targetY = (mouseY/window.innerHeight)-0.5;

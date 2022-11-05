@@ -6,16 +6,17 @@
 @font-face{font-family: CustomFont; src: url(./src/fonts/diagramm-regular.woff2);}
 
 :root{
-    --background-color:#090303;
-    --element-color:#e0ded9;
-    --element-sub-color:#e8e4da77;
-    --highlight-color:#ff0b58;
+    --background-color:#c9c8b3;
+    --element-color:#190d06;
+    --element-sub-color:#190d0677;
+    --highlight-color:#c81138;
 }
 
 *{
     margin: 0px;
     user-select: none;
     z-index: 10;
+    cursor: crosshair;
 }
 
 body{
@@ -133,7 +134,9 @@ canvas{
     opacity: 0%;
 
     color:var(--element-color);
-    font-size: 2rem;
+    margin-top: 10px;
+    font-weight: 500;
+    font-size: 1.5rem;
 
     transition-duration: 0.2s;
 }
@@ -177,6 +180,7 @@ canvas{
     left: 100%;
     border-left: solid 1px var(--element-sub-color);
     pointer-events: all;
+    background-color: var(--background-color);
 
     transition-duration: 1.5s;
     transition-timing-function: cubic-bezier(0.7,0,0.1,1);
@@ -187,7 +191,7 @@ canvas{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: none;
+    background-color: var(--background-color);
     border-right: 1px var(--element-sub-color) solid;
 }
 #articleBox{
@@ -324,4 +328,19 @@ p{
     80%{transform: translateY(-3em);}
     90%{transform: translateY(-3em);}
     100%{transform: translateY(-4em);}
+}
+
+#cursor{
+    position:absolute;
+    pointer-events: none;
+    top:0px;
+    left:0px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    border: var(--element-sub-color) 1px solid;
+    backdrop-filter: blur(10px);
+    margin-left: -25px;
+    margin-top: -25px;
+    background-color: none;
 }
