@@ -1,9 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
-@font-face{font-family: MainTitle; src: url(square_sans_serif_7.ttf);}
-@font-face{font-family: TitleTitle; src: url(ABCProphet-Light-Trial.otf);}
+@font-face{font-family: MainTitle; src: url(./src/fonts/);}
+@font-face{font-family: TitleTitle; src: url(./src/fonts/ABCProphet-Light-Trial.otf);}
 @font-face{font-family: ArticleTitle; src: url();}
-@font-face{font-family: CardTitle; src: url(PowerGrotesk-Regular.otf);}
-@font-face{font-family: CustomFont; src: url(diagramm-regular.woff2);}
+@font-face{font-family: CardTitle; src: url(./src/fonts/PowerGrotesk-Regular.otf);}
+@font-face{font-family: CustomFont; src: url(./src/fonts/diagramm-regular.woff2);}
+
+:root{
+    --background-color:#090303;
+    --element-color:#e0ded9;
+    --element-sub-color:#e8e4da77;
+    --highlight-color:#ff0b58;
+}
 
 *{
     margin: 0px;
@@ -12,7 +19,7 @@
 }
 
 body{
-    background-color: black;
+    background-color:var(--background-color);
 }
 canvas{
     position: absolute;
@@ -25,18 +32,11 @@ canvas{
     transition-duration: 1s;
     transition-timing-function: cubic-bezier(0.7,0,0.3,1);
 }
-#loadingOverlay{
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    background-color: green;
-}
+
 #mainTitle{
     width: 100%;
     font-family: MainTitle;
-    color: white;
+    color: var(--element-color);
     font-size: 4rem;
     margin-top: 4px;
     
@@ -74,11 +74,11 @@ canvas{
 }
 .cardConActive{
     left: 0% !important;
-    top: 56% !important;
+    top: 61% !important;
 }
 .canvasActive{
     left: 0% !important;
-    top: 50% !important;
+    top: 45% !important;
 }
 
 #card{
@@ -97,7 +97,7 @@ canvas{
     font-family: CardTitle;
     font-weight: 400;
     font-size: 2.5rem;
-    color: #ffffff;
+    color: var(--element-color);
     overflow-wrap: normal;
 
     transition-duration: 0.8s, 0.3s, 0.1s, 0.2s, 0.4s;
@@ -105,33 +105,34 @@ canvas{
     transition-timing-function:cubic-bezier(0.4,0,0.6,1);
 }
 #element:hover{
-    color:#ff204d;
+    color:var(--highlight-color);
 }
 .elementActive{
     scale: 1.8;
     transform: translateX(0px);
-    margin-left: -300px;
+    margin-left: -500px;
 }
 .elementActiveHover{
     transform: translateX(5px);
-    color:#ffffff !important;
+    color:var(--element-color) !important;
     opacity: 30%;
 }
 .elementActiveMain{
-    color: #ff204d !important;
-    transform: translateX(100px) translateY(5px)scale(1.5,1.5) !important;
+    color: var(--highlight-color) !important;
+    transform: translateX(120px) translateY(5px)scale(1.5,1.5) !important;
     opacity:100% !important;
 }
 #titleContainer{
     width: 100vw;
     height: 100%;
     position: relative;
+    background-color: var(--background-color);
 }
 #title{
     position: relative;
     opacity: 0%;
 
-    color:white;
+    color:var(--element-color);
     font-size: 2rem;
 
     transition-duration: 0.2s;
@@ -174,8 +175,7 @@ canvas{
     width: 100vw;
     height: 100%;
     left: 100%;
-    background-color: black;
-    border-left: solid 1px gray;
+    border-left: solid 1px var(--element-sub-color);
     pointer-events: all;
 
     transition-duration: 1.5s;
@@ -184,14 +184,11 @@ canvas{
 #articleExitBtn{
     width: 3%;
     height: 100%;
-    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: none;
-    border-right: 1px gray solid;
-    font-size: 2rem;
-    font-weight: 100;
+    border-right: 1px var(--element-sub-color) solid;
 }
 #articleBox{
     width: 47%;
@@ -208,7 +205,7 @@ canvas{
 
     background-color: rgba(128, 128, 128, 0.01);
     width: 600px;
-    color: white;
+    color: var(--element-color);
     line-height: 180%;
 }
 .articleConActive{
@@ -263,16 +260,68 @@ canvas{
 .bgGray{background-color: gray;}
 .bgBeige{background-color: beige;}
 
-.borderWhite{border:1px white solid}
-.borderTop{border-top:1px gray solid;}
-.borderBottom{border-bottom: 1px gray solid;}
-.borderRight{border-top: 1px gray solid;}
-.borderLeft{border-left: 1px gray solid;}
+.borderWhite{border:1px var(--element-color) solid}
+.borderTop{border-top:1px var(--element-sub-color) solid;}
+.borderBottom{border-bottom: 1px var(--element-sub-color) solid;}
+.borderRight{border-top: 1px var(--element-sub-color) solid;}
+.borderLeft{border-left: 1px var(--element-sub-color) solid;}
 
 .noPointer{pointer-events: none;}
 
 h1{
-    padding: 5px;
+    padding-bottom: 15px;
     font-weight: 700;
-    color: white;
+    color: var(--element-color);
+}
+h2{
+    padding-bottom: 8px;
+}
+p{
+    word-break: break-all;
+}
+
+#loadingOverlay{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity:100%;
+    transition-duration: 0.5s;
+    pointer-events: all;
+}
+#mask{
+    width: 1000px;
+    height: 6.8rem;
+    overflow: hidden;
+}
+#loadingText{
+    margin-top: -10px;
+    animation: loading;
+    animation-iteration-count: 1;
+    animation-duration: 5s;
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.7,0,0.3,1);
+    font-family: CardTitle;
+    font-size: 7rem;
+    color: var(--element-color);
+    text-align: center;
+    line-height: 7rem;
+}
+@keyframes loading {
+    0%{transform: translateY(1em);}
+    10%{transform: translateY(1em);}
+    20%{transform: translateY(0em);}
+    30%{transform: translateY(0em);}
+    40%{transform: translateY(-1em);}
+    50%{transform: translateY(-1em);}
+    60%{transform: translateY(-2em);}
+    70%{transform: translateY(-2em);}
+    80%{transform: translateY(-3em);}
+    90%{transform: translateY(-3em);}
+    100%{transform: translateY(-4em);}
 }

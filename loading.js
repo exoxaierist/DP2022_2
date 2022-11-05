@@ -10,6 +10,7 @@ function CheckLoad(){
 
 function OnLoad(){
     setTimeout(() => {
-        overlay.style.display = 'none';
-    }, 1000);
+        overlay.style.opacity="0%";
+        overlay.style.pointerEvents="none";
+    }, 5500);
 }

@@ -10,7 +10,7 @@ let graphicContainer = document.querySelector('#container');
 let articleContainer = document.querySelector('#articleContainer');
 
 let deltaTime=0,prevTime=0; 
-let centerX=cardContainer.offsetWidth*0.5,sizeX = 480,targetYScale=0,yScale=0;
+let centerX=cardContainer.offsetWidth*0.5,sizeX = 550,targetYScale=0,yScale=0;
 let mouseX=0,mouseY=0;
 let gap=(Math.PI*2)/cards.length;
 let targetOffset=0,offset=0,minAngle=0,rotateDir=1,deltaAngle=0,lerpAngle=0.001;
@@ -36,7 +36,7 @@ renderer.setSize( 2000,1100 );
 renderer.setPixelRatio(window.devicePixelRatio*1);
 graphicContainer.appendChild( renderer.domElement );
 
-const material = new THREE.PointsMaterial({color:0xeeeeee,size:0.012});
+const material = new THREE.PointsMaterial({color: 0xe0ded9,size:0.012});
 const pointArray = [];
 
 for (let i = 0; i < 1000; i++) {
@@ -119,18 +119,19 @@ function Scroll(){
 
 function UpdateCardPosition(){
   if(articleMode){
-    if(Math.sign(targetOffset-offset)!=rotateDir && !canChangeCard){
-      if(rotateDir>0) offset+=((targetOffset+Math.PI*2)-offset)*deltaTime*8;
-      else offset+=(targetOffset-(offset+Math.PI*2))*deltaTime*8;
-    }else offset+=(targetOffset-offset)*deltaTime*8;
+    if(targetOffset-offset>Math.PI || targetOffset-offset<-Math.PI) {
+      if(rotateDir>0) offset+=((targetOffset+Math.PI*2)-offset)*deltaTime*8+0.003;
+      else offset+=(targetOffset-(offset+Math.PI*2))*deltaTime*8-0.003;
+    }
+    else{offset+=(targetOffset-offset)*deltaTime*8;}
 
     if(Math.abs(targetOffset-offset)<0.08) {canChangeCard = true;}
-
   } else{
+
     if(lerpAngle/minAngle<0.5) deltaAngle = (lerpAngle/minAngle+0.03)*deltaTime*minAngle*5;
     else deltaAngle = (1-lerpAngle/minAngle)*deltaTime*minAngle*4;
     
-    if((Math.abs(minAngle-lerpAngle))>0.06) lerpAngle+=deltaAngle;
+    if((Math.abs(minAngle-lerpAngle))>0.01) {}
     else {
       deltaAngle=0; 
       canChangeCard=true;
@@ -141,7 +142,9 @@ function UpdateCardPosition(){
       }
       else offset += deltaScroll + deltaTime*0.1*scrollDir;
     }
+    lerpAngle += deltaAngle;
     offset += deltaAngle*rotateDir;
+
   }
 
   offset = (offset+Math.PI*2)%(Math.PI*2);
@@ -188,8 +191,8 @@ function ElementHoverEvent(i){
 }
 
 function ElementClickEvent(i){
-  if(!articleMode) EnterArticleMode();
   TargetCard(i);
+  if(!articleMode) EnterArticleMode();
 }
 
 function TargetCard(i){
@@ -200,7 +203,6 @@ function TargetCard(i){
     elements[i].classList.add('elementActiveMain');
   }
   canChangeCard = false;
-  targetOffset = ((Math.PI*0.5-i*gap)+(Math.PI*2))%(Math.PI*2);
   minAngle = targetOffset-offset;
   rotateDir = Math.sign(minAngle);
   minAngle = Math.abs(minAngle);
@@ -208,10 +210,13 @@ function TargetCard(i){
   deltaScroll=0;
   deltaAngle=0;
   lerpAngle=0;
+  targetOffset = ((Math.PI*0.5-i*gap)+(Math.PI*2))%(Math.PI*2);
+
   if(prevCard<0) prevCard = (i+1)%elements.length;
   else prevCard = currentCard;
   currentCard = i;
   scrollDir = rotateDir;
+
   TargetArticle();
   if(articleMode) TargetTitle(currentArticle);
 }
@@ -226,7 +231,6 @@ function TargetArticle(){
 
   if(prev%articles.length == current%articles.length) return;
 
-  console.log(prev%articles.length+ " " + current%articles.length);
   if(rotateDir<0){
     articles[prev%articles.length].classList.add('articleDisappearDown');
     articles[current%articles.length].classList.add('articleAppearDown');
@@ -256,7 +260,7 @@ function TargetTitle(i){
 
 function EnterArticleMode(){
   articleModeTransition = true;
-  targetYScale = 250;
+  targetYScale = 400;
   targetZ = 3;
   deltaZ = -0.001;
 
