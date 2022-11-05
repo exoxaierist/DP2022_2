@@ -40,10 +40,10 @@ graphicContainer.appendChild( renderer.domElement );
 const material = new THREE.PointsMaterial({color: 0x190d06,size:0.015});
 const pointArray = [];
 
-for (let i = 0; i < 1000; i++) {
-  pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiplyScalar(Math.pow(Math.random(),2)));
-}
 for (let i = 0; i < 2000; i++) {
+  pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiplyScalar(Math.pow(Math.random(),1)));
+}
+for (let i = 0; i < 5000; i++) {
   pointArray.push(new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiplyScalar(Math.random()*3));
 }
 for (let i = 0; i < 1000; i++) {
@@ -117,7 +117,8 @@ function MousePosInteraction(){
 }
 
 function Scroll(){
-  deltaScroll = Math.max(Math.min(deltaScroll+(targetScroll*0.002-deltaScroll)*deltaTime,1),-1);
+  deltaScroll = deltaScroll+(targetScroll*0.002-deltaScroll)*deltaTime;
+  //deltaScroll = Math.max(Math.min(deltaScroll+(targetScroll*0.002-deltaScroll)*deltaTime,1),-1);
   if(articleMode&&targetScroll!=0) {TargetCard((currentCard-Math.sign(targetScroll))%cards.length);}
   targetScroll = 0;
 }

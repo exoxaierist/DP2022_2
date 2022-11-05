@@ -6,9 +6,9 @@
 @font-face{font-family: CustomFont; src: url(./src/fonts/diagramm-regular.woff2);}
 
 :root{
-    --background-color:#c9c8b3;
-    --element-color:#190d06;
-    --element-sub-color:#190d0677;
+    --background-color:#c6c2b4;
+    --element-color:#1b0e06;
+    --element-sub-color:#1b0e0677;
     --highlight-color:#c81138;
 }
 
@@ -134,9 +134,9 @@ canvas{
     opacity: 0%;
 
     color:var(--element-color);
-    margin-top: 10px;
+    margin-top: 0.6%;
     font-weight: 500;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
 
     transition-duration: 0.2s;
 }
@@ -300,7 +300,7 @@ p{
 }
 #mask{
     width: 1000px;
-    height: 6.8rem;
+    height: 7rem;
     overflow: hidden;
 }
 #loadingText{
@@ -344,3 +344,22 @@ p{
     margin-top: -25px;
     background-color: none;
 }
+
+#logo{
+    position: absolute;
+    pointer-events: none;
+    top:10px;
+    left: 10px;
+    height:50px;
+}
+#logoTitle{
+    position: absolute;
+    pointer-events: none;
+    top:21px;
+    left:100px;
+    font-family: CardTitle;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--element-color);
+}
+
