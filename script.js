@@ -135,7 +135,7 @@ function UpdateCardPosition(){
   } else{
     if(lerp<1){
       if((1-lerp)<deltaTime) lerp=1;
-      else lerp+=deltaTime*0.2*minAngle;
+      else lerp+=deltaTime*0.8;
       deltaAngle = lerpAngle;
       lerpAngle = Lerp(0,minAngle,lerp<0.5?Math.pow(lerp*2,2)*0.5:0.5-Math.pow(1-(lerp-0.5)*2,2)*0.5+0.5);
       deltaAngle = lerpAngle-deltaAngle;
