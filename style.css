@@ -294,9 +294,9 @@ p{
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity:100%;
+    opacity:0%;
     transition-duration: 0.5s;
-    pointer-events: all;
+    pointer-events: none;
 }
 #mask{
     width: 1000px;
