@@ -14,7 +14,7 @@ let deltaTime=0,prevTime=0;
 let centerX=cardContainer.offsetWidth*0.5,sizeX = 550,targetYScale=0,yScale=0;
 let mouseX=0,mouseY=0,smoothX=0,smoothY=0;
 let gap=(Math.PI*2)/cards.length;
-let targetOffset=0,offset=0,minAngle=0,rotateDir=1,deltaAngle=0,lerp=0,lerpAngle=0,startOffset=0;
+let targetOffset=0,offset=0,minAngle=0,rotateDir=1,deltaAngle=0,lerp=1,lerpAngle=0,startOffset=0;
 let deltaScroll=0,targetScroll=0,scrollDir=1;
 
 let containerRotZ=0,containerRotX=0;
