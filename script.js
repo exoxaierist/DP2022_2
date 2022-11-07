@@ -149,7 +149,7 @@ function UpdateCardPosition(){
         articleMode = true;
         TargetCard(currentCard);
       }
-      offset+=deltaTime*0.1;
+      offset+=deltaTime*0.1+deltaScroll;
     }
   }
 
