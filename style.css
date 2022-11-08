@@ -105,18 +105,21 @@ canvas{
     transition-property: scale, color, transform, opacity, margin;
     transition-timing-function:cubic-bezier(0.4,0,0.6,1);
 }
-#element:hover{
+#card:hover .elementInactive{
     color:var(--highlight-color);
+}
+#card:hover .elementActive{
+    transform: translateX(5px);
+    color:var(--element-color);
+    opacity: 30%;
+}
+.elementInactive{
+    opacity: 100%;
 }
 .elementActive{
     scale: 1.8;
     transform: translateX(0px);
     margin-left: -500px;
-}
-.elementActiveHover{
-    transform: translateX(5px);
-    color:var(--element-color) !important;
-    opacity: 30%;
 }
 .elementActiveMain{
     color: var(--highlight-color) !important;

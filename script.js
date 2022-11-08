@@ -77,9 +77,15 @@ document.querySelector('#articleExitBtn').addEventListener('click',ExitArticleMo
 document.addEventListener('keydown',(e)=>{if(e.code === "Escape"&&articleMode) ExitArticleMode();});
 
 
-
+Initialize();
 Update();
 
+
+function Initialize(){
+  for (let i = 0; i < elements.length; i++) {
+    elements[i].classList.add('elementInactive');
+  }
+}
 
 function Update(){
   GetDeltaTime();
@@ -191,8 +197,6 @@ function ElementClick(e){
 }
 
 function ElementHoverEvent(i){
-  for (let j = 0; j < elements.length; j++) elements[j%elements.length].classList.remove('elementActiveHover');
-  if(articleMode) elements[i].classList.add('elementActiveHover');
   if(!articleMode && !articleModeTransition) TargetTitle(i);
 }
 
@@ -274,6 +278,7 @@ function EnterArticleMode(){
   articleContainer.classList.add('articleConActive');
   renderer.domElement.classList.add('canvasActive');
   for (let i = 0; i < elements.length; i++) {
+    elements[i].classList.remove('elementInactive');
     elements[i].classList.add('elementActive');
   }
 }
@@ -291,6 +296,8 @@ function ExitArticleMode(){
   articleContainer.classList.remove('articleConActive');
   renderer.domElement.classList.remove('canvasActive');
   for (let i = 0; i < elements.length; i++) {
+    elements[i].classList.add('elementInactive');
+    elements[i].classList.remove('elementActive');
     elements[i].classList.remove('elementActive');
     elements[i].classList.remove('elementActiveMain');
   }
