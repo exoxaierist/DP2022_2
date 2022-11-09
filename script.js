@@ -26,6 +26,8 @@ let prevCard = -1;
 let prevArticle = 0;
 let canChangeCard = true;
 
+let blur = false;
+
 ///// 3D /////
 
 const scene = new THREE.Scene();
@@ -37,7 +39,7 @@ renderer.setSize( 2000,1100 );
 renderer.setPixelRatio(window.devicePixelRatio*1);
 graphicContainer.appendChild( renderer.domElement );
 
-const material = new THREE.PointsMaterial({color: 0x190d06,size:0.015});
+const material = new THREE.PointsMaterial({color: 0x190d06,size:0.012});
 const pointArray = [];
 
 for (let i = 0; i < 2000; i++) {
@@ -66,7 +68,6 @@ scene.add(points);
 camera.position.z = 5;
 points.rotation.x =20*0.0174;
 
-
 document.addEventListener('wheel',(e) => {targetScroll = e.deltaY;scrollDir=Math.sign(e.deltaY);});
 document.addEventListener('mousemove',(e) => {mouseX = e.clientX; mouseY = e.clientY;});
 for (let i = 0; i < cards.length; i++) {
@@ -75,7 +76,6 @@ for (let i = 0; i < cards.length; i++) {
 }
 document.querySelector('#articleExitBtn').addEventListener('click',ExitArticleMode);
 document.addEventListener('keydown',(e)=>{if(e.code === "Escape"&&articleMode) ExitArticleMode();});
-
 
 Initialize();
 Update();
@@ -88,13 +88,13 @@ function Initialize(){
 }
 
 function Update(){
+  requestAnimationFrame(Update);
+  
   GetDeltaTime();
   MousePosInteraction();
   Scroll();
   UpdateCardPosition();
   Animate3D();
-  
-  requestAnimationFrame(Update);
 }
 
 function GetDeltaTime(){
@@ -104,6 +104,7 @@ function GetDeltaTime(){
 }
 
 function MousePosInteraction(){
+  if(mouseY<=5 || mouseY>=window.innerHeight-5 || mouseX<=5 || mouseX>=window.innerWidth-5) return;
   smoothX += (mouseX-smoothX)*deltaTime*5;
   smoothY += (mouseY-smoothY)*deltaTime*5;
   cursor.style.left = smoothX+"px";
@@ -115,10 +116,10 @@ function MousePosInteraction(){
     targetX = 0;
     targetY *= 0.5;
   }
-  containerRotX += (targetX*10 - containerRotX)*deltaTime;
-  containerRotZ += (-targetY*25 - containerRotZ)*deltaTime;
-  camera.rotation.z += (targetX*10*0.0174 - camera.rotation.z)*deltaTime*2;
-  points.rotation.x += (targetY*20*0.0174 - points.rotation.x + 10*0.0174)*deltaTime*2;
+  if(Math.abs(containerRotX)<30) containerRotX += (targetX*10 - containerRotX)*deltaTime;
+  if(Math.abs(containerRotX)<30) containerRotZ += (-targetY*25 - containerRotZ)*deltaTime;
+  if(Math.abs(camera.rotation.z)<30) camera.rotation.z += (targetX*10*0.0174 - camera.rotation.z)*deltaTime*2;
+  if(Math.abs(points.rotation.x)<30) points.rotation.x += (targetY*20*0.0174 - points.rotation.x + 10*0.0174)*deltaTime*2;
   cardContainer.style.transform = "translateX(-50%) translateY(-50%) translateZ(-100px) rotateZ("+(containerRotX)+"deg) rotateX("+(containerRotZ-20)+"deg)";
 }
 

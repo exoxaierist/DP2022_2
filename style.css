@@ -13,6 +13,7 @@
 }
 
 *{
+    font-family: 'Noto Sans KR', sans-serif;
     margin: 0px;
     user-select: none;
     z-index: 10;
@@ -22,6 +23,7 @@
 body{
     background-color:var(--background-color);
 }
+
 canvas{
     position: absolute;
     left: 50%;
@@ -50,6 +52,7 @@ canvas{
     width: 100vw;
     height: 100vh;
     pointer-events: none;
+    overflow: hidden;
         
     position: relative;
     overflow: hidden;
@@ -75,7 +78,7 @@ canvas{
 }
 .cardConActive{
     left: 0% !important;
-    top: 61% !important;
+    top: 65% !important;
 }
 .canvasActive{
     left: 0% !important;
@@ -133,23 +136,27 @@ canvas{
     background-color: var(--background-color);
 }
 #title{
-    position: relative;
-    opacity: 0%;
-
+    position: absolute;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    
     color:var(--element-color);
-    margin-top: 0.6%;
-    font-weight: 500;
-    font-size: 1.3rem;
-
+    
+    opacity: 0%;
     transition-duration: 0.2s;
 }
 .titleActive{
     opacity:100% !important;
 }
 .titleAnim{
-    font-family: CustomTitle;
     position: absolute;
-    overflow: visible;
+    margin-top: -2px;
+
+    font-weight: 400;
+    font-size: 1rem;
+
     animation: left 12s infinite;
     animation-timing-function: linear;
     transform: translateX(100vw);
@@ -277,10 +284,13 @@ canvas{
 
 h1{
     padding-bottom: 15px;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--element-color);
-}
+} 
 h2{
+    font-size: 1rem;
+    font-weight: 700;
     padding-bottom: 8px;
 }
 p{
@@ -297,9 +307,9 @@ p{
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity:100%;
+    opacity:0%;
     transition-duration: 0.5s;
-    pointer-events: all;
+    pointer-events: none;
 }
 #mask{
     width: 1000px;
