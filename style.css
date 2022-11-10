@@ -307,9 +307,9 @@ p{
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity:0%;
+    opacity:100%;
     transition-duration: 0.5s;
-    pointer-events: none;
+    pointer-events: all;
 }
 #mask{
     width: 1000px;
