@@ -85,6 +85,7 @@ function Initialize(){
   for (let i = 0; i < elements.length; i++) {
     elements[i].classList.add('elementInactive');
   }
+  cardContainer.style.transform = "translateX(-50%) translateY(-50%) translateZ(-100px) rotateX(-20deg)";
 }
 
 function Update(){
