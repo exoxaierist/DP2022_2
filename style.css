@@ -34,10 +34,6 @@ canvas{
 
     transition-duration: 1s;
     transition-timing-function: cubic-bezier(0.7,0,0.3,1);
-
-    background-image: url(./src/img/bck3.png);
-    background-position-x: center;
-    background-position-y: 105px;
 }
 
 #mainTitle{
