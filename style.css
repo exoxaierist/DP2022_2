@@ -34,6 +34,10 @@ canvas{
 
     transition-duration: 1s;
     transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+
+    background-image: url(./src/img/bck3.png);
+    background-position-x: center;
+    background-position-y: 105px;
 }
 
 #mainTitle{
@@ -219,7 +223,7 @@ canvas{
     margin-top: auto;
 
     background-color: rgba(128, 128, 128, 0.01);
-    width: 600px;
+    width: 700px;
     color: var(--element-color);
     line-height: 180%;
 }
@@ -262,7 +266,7 @@ canvas{
 .vw100{width: 100vw;}
 .w100{width:100%;}
 .w50{width: 50%;}
-.w30{width: 31%;}
+.w30{width: 32%;}
 .h100{height: 100%;}
 .h95{height:95%;}
 .h90{height:90%;}
